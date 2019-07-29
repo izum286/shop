@@ -1,8 +1,8 @@
 ### Add user profile
-POST http://localhost:8080/user
+POST http://localhost:8889/user
 Content-Type: application/json
 
-{"email": "vasya@mail.com","name": "Vasya","phone": "0545677889"}
+{"email": "petya@mail.com","name": "Petya","phone": "0525677889"}
 
 ###
 
