@@ -2,10 +2,7 @@ package com.telran.telranshopspringdata.service;
 
 import com.telran.telranshopspringdata.controller.dto.*;
 import com.telran.telranshopspringdata.data.*;
-import com.telran.telranshopspringdata.data.entity.ProductEntity;
-import com.telran.telranshopspringdata.data.entity.ProductOrderEntity;
-import com.telran.telranshopspringdata.data.entity.ShoppingCartEntity;
-import com.telran.telranshopspringdata.data.entity.UserEntity;
+import com.telran.telranshopspringdata.data.entity.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
@@ -37,6 +34,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     ProductOrderRepository productOrderRepository;
+
+    @Autowired
+    OrderRepository orderRepository;
 
     @Override
     //@Transactional
@@ -136,16 +136,48 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean clearShoppingCart(String userEmail) {
+        ShoppingCartEntity toClean = shoppingCartRepository.findByOwner_Email(userEmail);
+        if (toClean != null) {
+            toClean.setProducts(List.of());
+            toClean.setDate(null);
+            shoppingCartRepository.save(toClean);
+            return true;
+        }
         return false;
     }
 
     @Override
     public List<OrderDto> getOrders(String userEmail) {
-        return null;
+        return StreamSupport.stream(orderRepository.getAllByOwnerEmail(userEmail).spliterator(), false)
+                .map(Mapper::map)
+                .collect(Collectors.toList());
     }
 
     @Override
     public Optional<OrderDto> checkout(String userEmail) {
-        return Optional.empty();
+        if (enoughMoney(userEmail)) {
+            ShoppingCartEntity shoppingCartEntity = shoppingCartRepository.findByOwner_Email(userEmail);
+            UserEntity userEntity = userRepository.findById(userEmail).orElseThrow();
+            OrderEntity orderEntity = new OrderEntity();
+            orderEntity.setOwner(userEntity);
+            orderEntity.setProducts(shoppingCartEntity.getProducts());
+            orderEntity.setStatus(OrderStatus.DONE);
+            orderRepository.save(orderEntity);
+            clearShoppingCart(userEmail);
+            return Optional.of(map(orderEntity));
+        }
+        throw new RuntimeException("Not enough money");
+    }
+
+    private boolean enoughMoney (String userEmail){
+        ShoppingCartEntity toCheck = shoppingCartRepository.findByOwner_Email(userEmail);
+        UserEntity userEntity = userRepository.findById(userEmail).orElseThrow();
+
+        if (toCheck != null) {
+            long totalCost = toCheck.getProducts().stream().map(p -> (p.getPrice().longValue() * p.getCount())).count();
+            boolean isEnough = userEntity.getBalance().longValue() > totalCost ? true : false;
+            return isEnough;
+        }
+        throw new RuntimeException("Shopping cart is empty yet");
     }
 }

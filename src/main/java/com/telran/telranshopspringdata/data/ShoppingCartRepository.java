@@ -5,5 +5,4 @@ import org.springframework.data.repository.CrudRepository;
 
 public interface ShoppingCartRepository extends CrudRepository <ShoppingCartEntity, String> {
     ShoppingCartEntity findByOwner_Email(String ownerEmail);
-    boolean removeAllBypro
 }
