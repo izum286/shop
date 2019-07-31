@@ -21,6 +21,7 @@ public class ProductEntity {
             strategy = "org.hibernate.id.UUIDGenerator"
     )
     private String id;
+    @Column(name = "name",unique = true)
     private String name;
     private BigDecimal price;
     @ManyToOne
