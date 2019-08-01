@@ -81,7 +81,6 @@ public class UserServiceImpl implements UserService {
     public Optional<ShoppingCartDto> addProductToCart(String userEmail, String productId, int count) {
         ShoppingCartEntity entity = shoppingCartRepository.findByOwner_Email(userEmail);
         ProductEntity productEntity = productRepository.findById(productId).orElseThrow();
-
         if (entity != null ) {
             ProductOrderEntity poe = entity.getProducts().stream()
                     .filter(p -> p.getProductId().equals(productId))

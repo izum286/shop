@@ -15,33 +15,33 @@ public class AdminController {
     @Autowired
     AdminService adminService;
 
-    @PostMapping("category")
+    @PostMapping("admin/category")
     CategoryDto addCategory(String categoryName){
         return  adminService.addCategory(categoryName)
                 .orElseThrow();
     }
 
-    @PostMapping("products")
+    @PostMapping("admin/product")
     ProductDto addProduct(String productName, BigDecimal price, String categoryId){
         return adminService.addProduct(productName,price,categoryId).orElseThrow();
     }
 
-    @DeleteMapping("products/{productId}")
+    @DeleteMapping("product/{productId}")
     boolean removeProduct(@PathVariable("productId") String productId){
         return adminService.removeProduct(productId);
     }
 
-    @DeleteMapping("categories/{categoryId}")
+    @DeleteMapping("category/{categoryId}")
     boolean removeCategory(@PathVariable("categoryId") String categoryId){
         return adminService.removeCategory(categoryId);
     }
 
-    @PutMapping("categories/{categoryId}/{categoryName}")
+    @PutMapping("category/{categoryId}/{categoryName}")
     boolean updateCategory(@PathVariable("categoryId") String categoryId, @PathVariable("categoryName") String categoryName){
         return adminService.updateCategory(categoryId, categoryName);
     }
 
-    @PutMapping("products/{productId}/{price}")
+    @PutMapping("product/{productId}/{price}")
     boolean changeProductPrice(@PathVariable ("producttId") String productId, @PathVariable("price") BigDecimal price){
         return adminService.changeProductPrice(productId, price);
     }
