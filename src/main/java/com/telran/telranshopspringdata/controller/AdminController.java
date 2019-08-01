@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
-import java.util.Optional;
 
 @RestController
 public class AdminController {
@@ -15,8 +14,8 @@ public class AdminController {
     @Autowired
     AdminService adminService;
 
-    @PostMapping("admin/category")
-    CategoryDto addCategory(String categoryName){
+    @PostMapping("admin/category/{categoryName}")
+    CategoryDto addCategory(@PathVariable("categoryName") String categoryName){
         return  adminService.addCategory(categoryName)
                 .orElseThrow();
     }
