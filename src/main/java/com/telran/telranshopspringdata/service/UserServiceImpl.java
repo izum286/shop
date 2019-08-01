@@ -164,6 +164,8 @@ public class UserServiceImpl implements UserService {
             orderEntity.setStatus(OrderStatus.DONE);
             orderRepository.save(orderEntity);
             clearShoppingCart(userEmail);
+            userEntity.setBalance(userEntity.getBalance().subtract(totalCost(userEmail)));
+            userRepository.save(userEntity);
             return Optional.of(map(orderEntity));
         }
         throw new RuntimeException("Not enough money");
@@ -179,5 +181,11 @@ public class UserServiceImpl implements UserService {
             return isEnough;
         }
         throw new RuntimeException("Shopping cart is empty yet");
+    }
+
+    private BigDecimal totalCost ( String userEmail){
+        ShoppingCartEntity toCheck = shoppingCartRepository.findByOwner_Email(userEmail);
+        BigDecimal b = new BigDecimal(toCheck.getProducts().stream().map(p -> (p.getPrice().longValue() * p.getCount())).count());
+        return b;
     }
 }
