@@ -1,3 +1,9 @@
+###Registration
+POST http://localhost:8080/registration
+Content-Type: application/json
+
+{"email": "vasya@mail.com", "password": "12345.com"}
+
 ### Add user profile
 POST http://localhost:8080/user
 Content-Type: application/json
@@ -7,7 +13,8 @@ Content-Type: application/json
 ###
 
 ### GetUser Profile
-GET http://localhost:8080/user/vasya@mail.com
+GET http://localhost:8080/user
+Authorization:  Basic vasya@mail.com 12345.com
 
 ###
 

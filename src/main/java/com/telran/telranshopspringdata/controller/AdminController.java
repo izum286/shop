@@ -14,15 +14,15 @@ public class AdminController {
     @Autowired
     AdminService adminService;
 
-    @PostMapping("admin/category/{categoryName}")
-    CategoryDto addCategory(@PathVariable("categoryName") String categoryName){
-        return  adminService.addCategory(categoryName)
+    @PostMapping("admin/category")
+    CategoryDto addCategory(@RequestBody CategoryDto category){
+        return  adminService.addCategory(category.getName())
                 .orElseThrow();
     }
 
     @PostMapping("admin/product")
-    ProductDto addProduct(String productName, BigDecimal price, String categoryId){
-        return adminService.addProduct(productName,price,categoryId).orElseThrow();
+    ProductDto addProduct(@RequestBody ProductDto productDto){
+        return adminService.addProduct(productDto.getName(),productDto.getPrice(), productDto.getCategory().getId()).orElseThrow();
     }
 
     @DeleteMapping("product/{productId}")

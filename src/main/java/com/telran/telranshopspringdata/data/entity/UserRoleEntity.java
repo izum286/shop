@@ -1,10 +1,5 @@
 package com.telran.telranshopspringdata.data.entity;
-
-
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -19,11 +14,12 @@ import java.util.List;
 @Setter
 @Getter
 @Entity
+@Builder
 @Table(name = "roles")
 public class UserRoleEntity {
 
    @Id
-   String role;
+   private String role;
    @ManyToMany(mappedBy = "roles")
    private List<UserDetailsEntity> users;
 }

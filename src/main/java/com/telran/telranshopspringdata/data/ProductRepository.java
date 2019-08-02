@@ -7,6 +7,7 @@ import java.util.stream.Stream;
 
 public interface ProductRepository extends CrudRepository<ProductEntity, String> {
     Stream<ProductEntity> findAllByCategory_Id(String category);
+    Stream<ProductEntity> findAllBy();
 
     ProductEntity findByName(String ProductName);
 

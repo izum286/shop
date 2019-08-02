@@ -12,9 +12,8 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
-import static com.telran.telranshopspringdata.service.Mapper.*;
+import static com.telran.telranshopspringdata.service.Mapper.map;
 
 @Service
 @Transactional(isolation = Isolation.READ_COMMITTED)
@@ -57,7 +56,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<ProductDto> getAllProducts() {
-        return StreamSupport.stream(productRepository.findAll().spliterator(), false)
+        return productRepository.findAllBy()
                 .map(Mapper::map)
                 .collect(Collectors.toList());
 
@@ -65,7 +64,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<CategoryDto> getAllCategories() {
-        return StreamSupport.stream(categoryRepository.findAll().spliterator(), false)
+        return categoryRepository.findAllBy()
                 .map(Mapper::map)
                 .collect(Collectors.toList());
     }
@@ -147,7 +146,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<OrderDto> getOrders(String userEmail) {
-        return StreamSupport.stream(orderRepository.getAllByOwnerEmail(userEmail).spliterator(), false)
+        return orderRepository.getAllByOwnerEmail(userEmail)
                 .map(Mapper::map)
                 .collect(Collectors.toList());
     }

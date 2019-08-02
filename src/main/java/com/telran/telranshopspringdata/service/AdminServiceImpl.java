@@ -34,7 +34,7 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public Optional<CategoryDto> addCategory(String categoryName) {
-        if (categoryRepository.getCategoryEntityByName(categoryName) == null) {
+        if (categoryRepository.getCategoryEntityByName(categoryName)!=null) {
             CategoryEntity categoryEntity = new CategoryEntity();
             categoryEntity.setName(categoryName);
             categoryRepository.save(categoryEntity);
