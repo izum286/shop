@@ -37,12 +37,24 @@ public class UserServiceImpl implements UserService {
     @Autowired
     OrderRepository orderRepository;
 
+    @Autowired
+    UserDetailsRepository userDetailsRepository;
+
     @Override
     //@Transactional
     public Optional<UserDto> addUserInfo(String email, String name, String phone) {
         if(!userRepository.existsById(email)){
             UserEntity entity = new UserEntity(email, name, phone, BigDecimal.valueOf(0), null, null);
             userRepository.save(entity);
+            UserDetailsEntity detailsEntity = userDetailsRepository.findById(email).orElseThrow();
+            detailsEntity.setRoles(
+                    List.of(
+                            UserRoleEntity.builder()
+                                    .role("ROLE_FULL_USER")
+                                    .build()
+                    )
+            );
+            userDetailsRepository.save(detailsEntity);
             return Optional.of(map(entity));
         }
         return Optional.empty();

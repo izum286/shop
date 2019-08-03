@@ -42,16 +42,16 @@ public class UserController {
         return service.getProductsByCategory(categoryName);
     }
 
-    @PostMapping("cart/{userEmail}")
-    public ShoppingCartDto addProductToCart(@PathVariable("userEmail") String userEmail,
+    @PostMapping("cart")
+    public ShoppingCartDto addProductToCart(Principal principal,
                                             @RequestBody AddProductDto dto) {
-        return service.addProductToCart(userEmail, dto.getProductId(), dto.getCount())
+        return service.addProductToCart(principal.getName(), dto.getProductId(), dto.getCount())
                 .orElseThrow();
     }
 
-    @GetMapping("cart/{userEmail}")
-    public ShoppingCartDto getShoppingCart(@PathVariable("userEmail") String userEmail) {
-        return service.getShoppingCart(userEmail)
+    @GetMapping("cart")
+    public ShoppingCartDto getShoppingCart(Principal principal) {
+        return service.getShoppingCart(principal.getName())
                 .orElseThrow();
     }
 
@@ -68,15 +68,15 @@ public class UserController {
         service.clearShoppingCart(userEmail);
     }
 
-    @GetMapping("orders/{userEmail}")
-    public List<OrderDto> getAllOrdersByEmail(@PathVariable("userEmail")String userEmail){
-        return service.getOrders(userEmail);
+    @GetMapping("orders")
+    public List<OrderDto> getAllOrdersByEmail(Principal principal){
+        return service.getOrders(principal.getName());
     }
 
 
-    @GetMapping("checkout/{userEmail}")
-    public OrderDto checkout(@PathVariable("userEmail") String userEmail) {
-        return service.checkout(userEmail)
+    @GetMapping("checkout")
+    public OrderDto checkout(Principal principal) {
+        return service.checkout(principal.getName())
                 .orElseThrow();
     }
 }

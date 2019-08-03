@@ -26,10 +26,12 @@ public class SecurityConfig {
         return new CustomUserDetailsService(repository);
     }
 
+    //таким образом - поставляет один password encoder на все наше приложение
     @Bean PasswordEncoder encoder(){
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 
+    //AuthenticationManagerBuilder ему устанавливаем конкретный наш userDetailsService и наш passwordEncoder
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService())
@@ -40,12 +42,14 @@ public class SecurityConfig {
     static class AppSecurityConfig extends WebSecurityConfigurerAdapter {
         @Override
         protected void  configure (HttpSecurity http) throws Exception {
-            http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+            http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) //stateless - чтоб у нас не было сессий
                     .and().csrf().disable()
                     .authorizeRequests()
                     .antMatchers(HttpMethod.POST, "/registration").permitAll()
+                    .antMatchers(HttpMethod.POST, "/user").authenticated()
                     .antMatchers(HttpMethod.GET, "/products/**", "/categories").permitAll()
-                    .antMatchers("/user/**", "/cart/**").hasRole("USER")
+                    .antMatchers(HttpMethod.GET, "/user").authenticated()
+                    .antMatchers("/user/**", "/cart/**","/orders/**", "checkout").hasRole("FULL_USER")
                     .antMatchers("/admin/**").hasRole("ADMIN")
                     .anyRequest().denyAll()
                     .and()

@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+//dto для регистрации нашего пользователя
+//для ДОБАВЛЕНИЯ
 @NoArgsConstructor
 @AllArgsConstructor
 @Setter

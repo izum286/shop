@@ -8,17 +8,23 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.transaction.annotation.Transactional;
 
+//тот кому я передам этот CustomUserDetailsService
+//он будет лезть в репозиторий, и доставать оттуда юзеров
+//потом будет создавать объект user котрый имплементирует в себя объект userDetails
+//и возвращать его authManager - у.
 public class CustomUserDetailsService implements UserDetailsService {
 
+    //инжектим через конструктор - хотя большой разницы нет
     UserDetailsRepository repository;
-
     public CustomUserDetailsService(UserDetailsRepository repository) {
         this.repository = repository;
     }
 
 
     @Override
+    @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         UserDetailsEntity entity = repository.findById(username).orElse(null);
         if ((entity==null)){

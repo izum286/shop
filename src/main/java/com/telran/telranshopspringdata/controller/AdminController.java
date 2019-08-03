@@ -8,20 +8,20 @@ import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 
-@RestController--
+@RestController
 @RequestMapping ("admin")
 public class AdminController {
 
     @Autowired
     AdminService adminService;
 
-    @PostMapping("admin/category")
+    @PostMapping("category")
     CategoryDto addCategory(@RequestBody CategoryDto category){
         return  adminService.addCategory(category.getName())
                 .orElseThrow();
     }
 
-    @PostMapping("admin/product")
+    @PostMapping("product")
     ProductDto addProduct(@RequestBody ProductDto productDto){
         return adminService.addProduct(productDto.getName(),productDto.getPrice(), productDto.getCategory().getId()).orElseThrow();
     }
