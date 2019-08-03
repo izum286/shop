@@ -8,7 +8,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 
-@RestController
+@RestController--
+@RequestMapping ("admin")
 public class AdminController {
 
     @Autowired

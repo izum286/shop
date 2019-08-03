@@ -129,6 +129,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Optional<ShoppingCartDto> getShoppingCart(String userEmail) {
+        ShoppingCartEntity shoppingCartEntity = shoppingCartRepository.findByOwner_Email(userEmail);
+        if (shoppingCartEntity == null) {
+            throw new RuntimeException("Wrong Shopping Cart");
+        }
         return Optional.of(map(shoppingCartRepository.findByOwner_Email(userEmail)));
     }
 
