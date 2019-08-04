@@ -19,6 +19,8 @@ public class UserDetailsEntity {
     private String email;
     private String password;
 
+
+
     @ManyToMany
     @JoinTable(
             name = "user_roles",

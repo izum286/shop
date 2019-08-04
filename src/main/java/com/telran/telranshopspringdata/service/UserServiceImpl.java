@@ -44,7 +44,7 @@ public class UserServiceImpl implements UserService {
     //@Transactional
     public Optional<UserDto> addUserInfo(String email, String name, String phone) {
         if(!userRepository.existsById(email)){
-            UserEntity entity = new UserEntity(email, name, phone, BigDecimal.valueOf(0), null, null);
+            UserEntity entity = new UserEntity(email, name, phone, BigDecimal.valueOf(0), null, null, null);
             userRepository.save(entity);
             UserDetailsEntity detailsEntity = userDetailsRepository.findById(email).orElseThrow();
             detailsEntity.setRoles(

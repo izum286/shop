@@ -28,4 +28,7 @@ public class UserEntity {
     private ShoppingCartEntity shoppingCart;
     @OneToMany(mappedBy = "owner")
     private List<OrderEntity> orders;
+
+    @OneToOne
+    private UserDetailsEntity userDetailsEntity;
 }
