@@ -1,27 +1,21 @@
 package com.telran.telranshopspringdata.service;
 
-import com.telran.telranshopspringdata.controller.dto.CategoryDto;
-import com.telran.telranshopspringdata.controller.dto.ProductDto;
+import com.telran.telranshopspringdata.controller.dto.*;
 import com.telran.telranshopspringdata.data.CategoryRepository;
 import com.telran.telranshopspringdata.data.ProductRepository;
 import com.telran.telranshopspringdata.data.UserRepository;
 import com.telran.telranshopspringdata.data.entity.CategoryEntity;
 import com.telran.telranshopspringdata.data.entity.ProductEntity;
-import com.telran.telranshopspringdata.data.entity.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
-import java.util.Optional;
-
-import static com.telran.telranshopspringdata.service.Mapper.*;
-
+import java.util.List;
 
 @Service
 @Transactional(isolation = Isolation.READ_COMMITTED)
-public class AdminServiceImpl implements AdminService {
+public class AdminServiceImpl implements AdminService{
 
     @Autowired
     CategoryRepository categoryRepository;
@@ -33,77 +27,63 @@ public class AdminServiceImpl implements AdminService {
     UserRepository userRepository;
 
     @Override
-    public Optional<CategoryDto> addCategory(String categoryName) {
-        if (categoryRepository.getCategoryEntityByName(categoryName)!=null) {
-            CategoryEntity categoryEntity = new CategoryEntity();
-            categoryEntity.setName(categoryName);
-            categoryRepository.save(categoryEntity);
-            return Optional.of(map(categoryEntity));
+    public String addProduct(ProductDto productDto) {
+        if (productRepository.findById(productDto.getId()) != null) {
+            throw new RuntimeException("product already exist");
         }
-        throw new RuntimeException("Category already exist");
+        String categoryName = categoryRepository.getCategoryEntityByName(productDto.getCategory().getName()).getName();
+        if (categoryName == null) {
+            throw new RuntimeException("There is no suitable category for this product. ");
+        }
+        ProductEntity productEntity = new ProductEntity();
+        productEntity.setName(productDto.getName());
+        productEntity.setPrice(productDto.getPrice());
+        productEntity.setCategory(categoryRepository.getCategoryEntityByName(categoryName));
+        productRepository.save(productEntity);
+        return productEntity.getId();
     }
 
     @Override
-    public Optional<ProductDto> addProduct(String productName, BigDecimal price, String categoryId) {
-        if (productRepository.findByName(productName )==null) {
-            ProductEntity productEntity = new ProductEntity();
-            productEntity.setName(productName);
-            productEntity.setPrice(price);
-            productEntity.setCategory(categoryRepository.findById(categoryId).orElseThrow());
-            productRepository.save(productEntity);
-            return Optional.of(map(productEntity));
-        }
-        throw new RuntimeException("Product already exist");
+    public String changeProductPrice(ChangeProductPriceDto changeProductPriceDto) {
+        //вопрос: каков синтаксис чтобы при ткой форме записи RuntimeException принимал кастомное описание ошибки???
+        ProductEntity productEntity = productRepository
+                .findById(changeProductPriceDto.getProductId())
+                .orElseThrow(RuntimeException::new);
+        productEntity.setPrice(changeProductPriceDto.getPrice());
+        productRepository.save(productEntity);
+        return productEntity.getId() + " price changed";
     }
 
     @Override
-    public boolean removeProduct(String productId) {
-        if (productRepository.existsById(productId)) {
-            productRepository.deleteById(productId);
-            return true;
+    public String addCategory(CategoryDto categoryDto) {
+        if (categoryRepository.getCategoryEntityByName(categoryDto.getName()) != null) {
+            throw new RuntimeException("Category with name " + categoryDto.getName() + " already exist");
         }
-        return false;
+        CategoryEntity categoryEntity = new CategoryEntity();
+        categoryEntity.setName(categoryDto.getName());
+        categoryRepository.save(categoryEntity);
+        return categoryEntity.getId();
+    }
+
+    //===========statistic methods//===========statistic methods//===========statistic methods
+
+    @Override
+    public List<ProductStatisticDto> getMostPopularProduct() {
+        return null;
     }
 
     @Override
-    public boolean removeCategory(String categoryId) {
-        if (categoryRepository.existsById(categoryId)) {
-            categoryRepository.deleteById(categoryId);
-            return true;
-        }
-        return false;
+    public List<ProductStatisticDto> getMostProfitableProduct() {
+        return null;
     }
 
     @Override
-    public boolean updateCategory(String categoryId, String categoryName) {
-        CategoryEntity categoryEntity = categoryRepository.findById(categoryId).orElse(null);
-        if (categoryEntity!=null) {
-            categoryEntity.setName(categoryName);
-            categoryRepository.save(categoryEntity);
-            return true;
-        }
-        return false;
+    public List<UserStatisticDto> getMostActiveUser() {
+        return null;
     }
 
     @Override
-    public boolean changeProductPrice(String productId, BigDecimal price) {
-        ProductEntity productEntity = productRepository.findById(productId).orElse(null);
-        if (productEntity!=null) {
-            productEntity.setPrice(price);
-            productRepository.save(productEntity);
-            return true;
-        }
-        return false;
-    }
-
-    @Override
-    public boolean addBalance(String userEmail, BigDecimal balance) {
-        UserEntity userEntity = userRepository.findById(userEmail).orElse(null);
-        if (userEntity!=null) {
-            userEntity.setBalance(balance);
-            userRepository.save(userEntity);
-            return true;
-        }
-        return false;
+    public List<UserStatisticDto> getMostProfitableUser() {
+        return null;
     }
 }
