@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 @Setter
 @Getter
 @Builder
-public class ProductStatisticsDto {
+public class ProductStatisticDto {
     private String productName;
     private String productCategory;
     private int numberOfPurchaises;

@@ -1,54 +1,46 @@
 package com.telran.telranshopspringdata.controller;
 
-import com.telran.telranshopspringdata.controller.dto.CategoryDto;
-import com.telran.telranshopspringdata.controller.dto.ProductDto;
-import com.telran.telranshopspringdata.service.AdminService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.telran.telranshopspringdata.controller.dto.*;
 import org.springframework.web.bind.annotation.*;
 
-import java.math.BigDecimal;
+import java.util.List;
 
 @RestController
-@RequestMapping ("admin")
+@RequestMapping("admin")
 public class AdminController {
 
-    @Autowired
-    AdminService adminService;
+    @PostMapping("product")
+    public String addProduct(@RequestBody ProductDto dto){
+        return null;
+    }
+
+    @PutMapping("product")
+    public String changeProductPrice(@RequestBody ChangeProductPriceDto dto){
+        return null;
+    }
 
     @PostMapping("category")
-    CategoryDto addCategory(@RequestBody CategoryDto category){
-        return  adminService.addCategory(category.getName())
-                .orElseThrow();
+    public String addCategory(@RequestBody CategoryDto dto){
+        return null;
     }
 
-    @PostMapping("product")
-    ProductDto addProduct(@RequestBody ProductDto productDto){
-        return adminService.addProduct(productDto.getName(),productDto.getPrice(), productDto.getCategory().getId()).orElseThrow();
+    @GetMapping("statistic/mostPopularProducts")
+    public List<ProductStatisticDto> getMostPopularProduct(){
+        return null;
     }
 
-    @DeleteMapping("product/{productId}")
-    boolean removeProduct(@PathVariable("productId") String productId){
-        return adminService.removeProduct(productId);
+    @GetMapping("statistic/mostProfitableProducts")
+    public List<ProductStatisticDto> getMostProfitableProduct(){
+        return null;
     }
 
-    @DeleteMapping("category/{categoryId}")
-    boolean removeCategory(@PathVariable("categoryId") String categoryId){
-        return adminService.removeCategory(categoryId);
+    @GetMapping("statistic/mostActiveUser")
+    public List<UserStatisticDto> getMostActiveUser(){
+        return null;
     }
 
-    @PutMapping("category/{categoryId}/{categoryName}")
-    boolean updateCategory(@PathVariable("categoryId") String categoryId, @PathVariable("categoryName") String categoryName){
-        return adminService.updateCategory(categoryId, categoryName);
+    @GetMapping("statistic/mostProfitableUser")
+    public List<UserStatisticDto> getMostProfitableUser(){
+        return null;
     }
-
-    @PutMapping("product/{productId}/{price}")
-    boolean changeProductPrice(@PathVariable ("producttId") String productId, @PathVariable("price") BigDecimal price){
-        return adminService.changeProductPrice(productId, price);
-    }
-
-    @PutMapping("users/{userEmail}/{balance}")
-    boolean addBalance(@PathVariable("userEmail") String userEmail, @PathVariable("balance") BigDecimal balance){
-        return adminService.addBalance(userEmail, balance);
-    }
-
 }

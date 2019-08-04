@@ -10,7 +10,7 @@ import java.util.List;
 @Setter
 @Getter
 @Builder
-public class UserStatisticsDto {
+public class UserStatisticDto {
     private String userEmail;
     private List<ProductOrderDto> products;
     private int TotalProductCount;
