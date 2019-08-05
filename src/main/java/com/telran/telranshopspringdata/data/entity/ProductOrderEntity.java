@@ -30,6 +30,7 @@ public class ProductOrderEntity {
     @OneToOne
     @JoinColumn(name = "category_id")
     private CategoryEntity category;
+
     @ManyToOne
     @JoinColumn(name = "shoping_cart_id")
     private ShoppingCartEntity shoppingCart;

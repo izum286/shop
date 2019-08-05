@@ -173,11 +173,17 @@ public class UserServiceImpl implements UserService {
             ShoppingCartEntity shoppingCartEntity = shoppingCartRepository.findByOwner_Email(userEmail);
             UserEntity userEntity = userRepository.findById(userEmail).orElseThrow();
             OrderEntity orderEntity = new OrderEntity();
+            List<ProductOrderEntity> products = shoppingCartEntity.getProducts();
+            for (ProductOrderEntity productOrderEntity : products) {
+                productOrderEntity.setOrder(orderEntity);
+                productOrderEntity.setShoppingCart(null);
+            }
             orderEntity.setOwner(userEntity);
             orderEntity.setProducts(shoppingCartEntity.getProducts());
             orderEntity.setStatus(OrderStatus.DONE);
             orderRepository.save(orderEntity);
             clearShoppingCart(userEmail);
+            userEntity.getOrders().add(orderEntity);
             userEntity.setBalance(userEntity.getBalance().subtract(totalCost(userEmail)));
             userRepository.save(userEntity);
             return Optional.of(map(orderEntity));
