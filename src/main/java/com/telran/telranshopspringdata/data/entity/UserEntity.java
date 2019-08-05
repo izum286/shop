@@ -30,5 +30,6 @@ public class UserEntity {
     private List<OrderEntity> orders;
 
     @OneToOne
+    @JoinColumn(name = "email")
     private UserDetailsEntity userDetailsEntity;
 }
