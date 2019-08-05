@@ -32,6 +32,7 @@ public class UserDetailsEntity {
             )
     )
     private List<UserRoleEntity> roles;
+
     @OneToOne(mappedBy = "userDetailsEntity")
     private UserEntity owner;
 
