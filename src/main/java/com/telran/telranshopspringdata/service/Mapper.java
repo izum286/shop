@@ -63,4 +63,21 @@ public class Mapper {
                 .status(entity.getStatus().name())
                 .build();
     }
+
+    public static ProductStatisticDto map(ProductStatistiEntity entity) {
+        return ProductStatisticDto.builder()
+                .numberOfPurchaises(entity.getNumberOfPurchaises())
+                .productCategory(entity.getProductCategory())
+                .productName(entity.getProductName())
+                .totalAmount(entity.getTotalAmount())
+                .build();
+    }
+
+    public static UserStatisticDto map(UserStatisticEntity entity) {
+        return UserStatisticDto.builder()
+                .userEmail(entity.getUserEmail())
+                .totalAmount(entity.getTotalAmount())
+                .TotalProductCount(entity.getTotalProductCount())
+                .build();
+    }
 }

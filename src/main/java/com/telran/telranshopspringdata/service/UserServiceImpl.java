@@ -40,6 +40,13 @@ public class UserServiceImpl implements UserService {
     @Autowired
     UserDetailsRepository userDetailsRepository;
 
+    @Autowired
+    ProductStatisticRepository productStatisticRepository;
+
+    @Autowired
+    UserStatisticRepository userStatisticRepository;
+
+
     @Override
     //@Transactional
     public Optional<UserDto> addUserInfo(String email, String name, String phone) {
@@ -186,6 +193,30 @@ public class UserServiceImpl implements UserService {
             userEntity.getOrders().add(orderEntity);
             userEntity.setBalance(userEntity.getBalance().subtract(totalCost(userEmail)));
             userRepository.save(userEntity);
+
+            //=====filling product stat===NOT_FINISHED
+            //I didnt have enough time to finish
+            for (ProductOrderEntity productOrderEntity : products) {
+                //if product id not exist in row = add row and fill
+                //if exist - update row
+            }
+
+            //======filling user stat
+            UserStatisticEntity userStatisticEntity = userStatisticRepository.findById(userEmail).orElse(null);
+            if(userStatisticEntity==null){
+                 userStatisticEntity = UserStatisticEntity.builder()
+                        .userEmail(userEntity.getEmail())
+                        .TotalProductCount(products.size())
+                        .totalAmount(totalCost(userEntity.getEmail())).build();
+            }else {
+                userStatisticEntity.setTotalProductCount(userStatisticEntity.getTotalProductCount()+products.size());
+                userStatisticEntity.setTotalAmount(userStatisticEntity.getTotalAmount().add(totalCost(userEmail)));
+            }
+
+            userStatisticRepository.save(userStatisticEntity);
+
+
+
             return Optional.of(map(orderEntity));
         }
         throw new RuntimeException("Not enough money");

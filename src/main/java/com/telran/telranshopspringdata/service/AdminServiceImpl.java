@@ -1,9 +1,7 @@
 package com.telran.telranshopspringdata.service;
 
 import com.telran.telranshopspringdata.controller.dto.*;
-import com.telran.telranshopspringdata.data.CategoryRepository;
-import com.telran.telranshopspringdata.data.ProductRepository;
-import com.telran.telranshopspringdata.data.UserRepository;
+import com.telran.telranshopspringdata.data.*;
 import com.telran.telranshopspringdata.data.entity.CategoryEntity;
 import com.telran.telranshopspringdata.data.entity.ProductEntity;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +10,7 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional(isolation = Isolation.READ_COMMITTED)
@@ -25,6 +24,12 @@ public class AdminServiceImpl implements AdminService{
 
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    UserStatisticRepository userStatisticRepository;
+
+    @Autowired
+    ProductStatisticRepository productStatisticRepository;
 
     @Override
     public String addProduct(ProductDto productDto) {
@@ -69,21 +74,29 @@ public class AdminServiceImpl implements AdminService{
 
     @Override
     public List<ProductStatisticDto> getMostPopularProduct() {
-        return null;
+        return productStatisticRepository.findFirstByNumberOfPurchaisesOrderByNumberOfPurchaisesDesc()
+                .map(Mapper::map)
+                .collect(Collectors.toList());
     }
 
     @Override
     public List<ProductStatisticDto> getMostProfitableProduct() {
-        return null;
+        return productStatisticRepository.findFirstByTotalAmountOrderByTotalAmountDesc()
+                .map(Mapper::map)
+                .collect(Collectors.toList());
     }
 
     @Override
     public List<UserStatisticDto> getMostActiveUser() {
-        return null;
+        return userStatisticRepository.findFirstByTotalProductCountOrderByTotalProductCountDesc()
+                .map(Mapper::map)
+                .collect(Collectors.toList());
     }
 
     @Override
     public List<UserStatisticDto> getMostProfitableUser() {
-        return null;
+        return userStatisticRepository.findFirstByTotalAmountOrderByTotalAmountDesc()
+                .map(Mapper::map)
+                .collect(Collectors.toList());
     }
 }

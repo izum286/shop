@@ -33,21 +33,21 @@ public class AdminController {
 //===========statistic methods//===========statistic methods//===========statistic methods
     @GetMapping("statistic/mostPopularProducts")
     public List<ProductStatisticDto> getMostPopularProduct(){
-        return null;
+        return adminService.getMostPopularProduct();
     }
 
     @GetMapping("statistic/mostProfitableProducts")
     public List<ProductStatisticDto>    getMostProfitableProduct(){
-        return null;
+        return adminService.getMostProfitableProduct();
     }
 
     @GetMapping("statistic/mostActiveUser")
     public List<UserStatisticDto> getMostActiveUser(){
-        return null;
+        return adminService.getMostActiveUser();
     }
 
     @GetMapping("statistic/mostProfitableUser")
     public List<UserStatisticDto> getMostProfitableUser(){
-        return null;
+        return adminService.getMostProfitableUser();
     }
 }
