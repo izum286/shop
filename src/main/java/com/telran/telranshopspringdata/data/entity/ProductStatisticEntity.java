@@ -14,7 +14,7 @@ import java.math.BigDecimal;
 @Builder
 @Entity
 @Table(name = "product_stat")
-public class ProductStatistiEntity {
+public class ProductStatisticEntity {
     @Id
     private String productId;
     private String productName;

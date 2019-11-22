@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 //тот кому я передам этот CustomUserDetailsService
 //он будет лезть в репозиторий, и доставать оттуда юзеров
 //потом будет создавать объект user котрый имплементирует в себя объект userDetails
-//и возвращать его authManager - у.
+//и возвра щать его authManager - у.
 public class CustomUserDetailsService implements UserDetailsService {
 
     //инжектим через конструктор - хотя большой разницы нет

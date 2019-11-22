@@ -2,18 +2,26 @@ package com.telran.telranshopspringdata.controller;
 
 
 import com.telran.telranshopspringdata.controller.dto.*;
+import com.telran.telranshopspringdata.data.UserRepository;
+import com.telran.telranshopspringdata.service.Mapper;
 import com.telran.telranshopspringdata.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @RestController
 public class UserController {
 
     @Autowired
     UserService service;
+
+    @Autowired
+    UserRepository repository;
 
     @PostMapping("user")
     public UserDto addUserInfo(@RequestBody UserDto user) {
@@ -27,9 +35,31 @@ public class UserController {
                 .orElseThrow();
     }
 
+    /**
+     * mock request - only for test that application running
+     * @return collection of Hello's
+     */
+    @GetMapping("/test")
+    public Collection<String> sayHello() {
+        return IntStream.range(0, 10)
+                .mapToObj(i -> "Hi Bro! All Works fine - you're great! " + i)
+                .collect(Collectors.toList());
+    }
+
     @GetMapping("products")
     public List<ProductDto> getAllProducts() {
         return service.getAllProducts();
+    }
+
+    /**
+     * mock method - get all products from DB
+     * Delete from final
+     * @return
+     */
+    @GetMapping("getall")
+    public List<UserDto> getAllUsers(){
+        return repository.getAllBy().map(Mapper::map)
+                .collect(Collectors.toList());
     }
 
     @GetMapping("categories")

@@ -11,6 +11,6 @@ public interface AdminService {
 
     List<ProductStatisticDto> getMostPopularProduct();
     List<ProductStatisticDto> getMostProfitableProduct();
-     List<UserStatisticDto> getMostActiveUser();
-     List<UserStatisticDto> getMostProfitableUser();
+    List<UserStatisticDto> getMostActiveUser();
+    List<UserStatisticDto> getMostProfitableUser();
 }

@@ -7,9 +7,15 @@ import java.util.stream.Stream;
 
 public interface UserStatisticRepository extends CrudRepository<UserStatisticEntity, String> {
 
-    //mostActiveUser
+    /**
+     * lazy stream initialization - provide list of most active users
+     * @return
+     */
     Stream<UserStatisticEntity> findFirstByTotalProductCountOrderByTotalProductCountDesc();
 
-    //mostProfitableUser
+    /**
+     * lazy stream initialization - provide list of most profitable users
+     * @return
+     */
     Stream<UserStatisticEntity> findFirstByTotalAmountOrderByTotalAmountDesc();
 }

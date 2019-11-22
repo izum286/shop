@@ -31,6 +31,7 @@ public class AdminController {
         return adminService.addCategory(dto);
     }
 //===========statistic methods//===========statistic methods//===========statistic methods
+
     @GetMapping("statistic/mostPopularProducts")
     public List<ProductStatisticDto> getMostPopularProduct(){
         return adminService.getMostPopularProduct();

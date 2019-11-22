@@ -46,7 +46,6 @@ public class UserServiceImpl implements UserService {
     @Autowired
     UserStatisticRepository userStatisticRepository;
 
-
     @Override
     //@Transactional
     public Optional<UserDto> addUserInfo(String email, String name, String phone) {
@@ -204,7 +203,7 @@ public class UserServiceImpl implements UserService {
             //======filling user stat
             UserStatisticEntity userStatisticEntity = userStatisticRepository.findById(userEmail).orElse(null);
             if(userStatisticEntity==null){
-                 userStatisticEntity = UserStatisticEntity.builder()
+                userStatisticEntity = UserStatisticEntity.builder()
                         .userEmail(userEntity.getEmail())
                         .TotalProductCount(products.size())
                         .totalAmount(totalCost(userEntity.getEmail())).build();
@@ -214,6 +213,10 @@ public class UserServiceImpl implements UserService {
             }
 
             userStatisticRepository.save(userStatisticEntity);
+
+
+
+
 
 
 

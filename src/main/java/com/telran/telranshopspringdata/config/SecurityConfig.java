@@ -26,18 +26,24 @@ public class SecurityConfig {
         return new CustomUserDetailsService(repository);
     }
 
-    //таким образом - поставляет один password encoder на все наше приложение
+    /**
+     * provided singleton of PasswordEncoder to our application
+     * @return  PasswordEncoder
+     */
     @Bean PasswordEncoder encoder(){
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 
-    //AuthenticationManagerBuilder ему устанавливаем конкретный наш userDetailsService и наш passwordEncoder
+
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService())
                 .passwordEncoder(encoder());
     }
 
+    /**
+     * here is some mock filters - check before deploy to production
+     */
     @Configuration
     static class AppSecurityConfig extends WebSecurityConfigurerAdapter {
         @Override
@@ -47,8 +53,11 @@ public class SecurityConfig {
                     .authorizeRequests()
                     .antMatchers(HttpMethod.POST, "/registration").permitAll()
                     .antMatchers(HttpMethod.POST, "/user").authenticated()
+                    //.antMatchers(HttpMethod.POST, "/user").permitAll()
                     .antMatchers(HttpMethod.GET, "/products/**", "/categories").permitAll()
                     .antMatchers(HttpMethod.GET, "/user").authenticated()
+                    .antMatchers(HttpMethod.GET, "/getall").permitAll()
+                    .antMatchers(HttpMethod.GET, "/hellodude").permitAll()
                     .antMatchers("/user/**", "/cart/**","/orders/**", "checkout").hasRole("FULL_USER")
                     .antMatchers("/admin/**").hasRole("ADMIN")
                     .anyRequest().denyAll()

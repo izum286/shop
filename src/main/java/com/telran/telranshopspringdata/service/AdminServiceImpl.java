@@ -31,6 +31,8 @@ public class AdminServiceImpl implements AdminService{
     @Autowired
     ProductStatisticRepository productStatisticRepository;
 
+
+
     @Override
     public String addProduct(ProductDto productDto) {
         if (productRepository.findById(productDto.getId()) != null) {
@@ -50,7 +52,6 @@ public class AdminServiceImpl implements AdminService{
 
     @Override
     public String changeProductPrice(ChangeProductPriceDto changeProductPriceDto) {
-        //вопрос: каков синтаксис чтобы при ткой форме записи RuntimeException принимал кастомное описание ошибки???
         ProductEntity productEntity = productRepository
                 .findById(changeProductPriceDto.getProductId())
                 .orElseThrow(RuntimeException::new);
@@ -70,7 +71,11 @@ public class AdminServiceImpl implements AdminService{
         return categoryEntity.getId();
     }
 
-    //===========statistic methods//===========statistic methods//===========statistic methods
+    /**
+     * below - some methods for statistic representation
+     * @return
+     */
+
 
     @Override
     public List<ProductStatisticDto> getMostPopularProduct() {
@@ -99,4 +104,10 @@ public class AdminServiceImpl implements AdminService{
                 .map(Mapper::map)
                 .collect(Collectors.toList());
     }
+
+
+
+
+
+
 }

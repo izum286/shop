@@ -64,7 +64,7 @@ public class Mapper {
                 .build();
     }
 
-    public static ProductStatisticDto map(ProductStatistiEntity entity) {
+    public static ProductStatisticDto map(ProductStatisticEntity entity) {
         return ProductStatisticDto.builder()
                 .numberOfPurchaises(entity.getNumberOfPurchaises())
                 .productCategory(entity.getProductCategory())
