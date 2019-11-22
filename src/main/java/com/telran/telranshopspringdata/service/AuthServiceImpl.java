@@ -8,7 +8,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import java.util.Arrays;
 
 
 @Service
@@ -30,7 +30,7 @@ public class AuthServiceImpl implements AuthService{
         entity.setEmail(email);
         entity.setPassword(encoder.encode(password));
         entity.setRoles(
-                List.of(
+                Arrays.asList(
                         UserRoleEntity.builder()
                         .role("ROLE_USER")
                         .build()

@@ -26,13 +26,13 @@ public class UserController {
     @PostMapping("user")
     public UserDto addUserInfo(@RequestBody UserDto user) {
         return service.addUserInfo(user.getEmail(), user.getName(), user.getPhone())
-                .orElseThrow();
+                .orElseThrow(RuntimeException::new);
     }
 
     @GetMapping("user")
     public UserDto getUserInfo(Principal principal) {
         return service.getUserInfo(principal.getName())
-                .orElseThrow();
+                .orElseThrow(RuntimeException::new);
     }
 
     /**
@@ -76,13 +76,13 @@ public class UserController {
     public ShoppingCartDto addProductToCart(Principal principal,
                                             @RequestBody AddProductDto dto) {
         return service.addProductToCart(principal.getName(), dto.getProductId(), dto.getCount())
-                .orElseThrow();
+                .orElseThrow(RuntimeException::new);
     }
 
     @GetMapping("cart")
     public ShoppingCartDto getShoppingCart(Principal principal) {
         return service.getShoppingCart(principal.getName())
-                .orElseThrow();
+                .orElseThrow(RuntimeException::new);
     }
 
     @DeleteMapping("cart/{userEmail}/{productId}/{count}")
@@ -90,7 +90,7 @@ public class UserController {
                                                  @PathVariable("productId") String productId,
                                                  @PathVariable("count") int count) {
         return service.removeProductFromCart(userEmail,productId,count)
-                .orElseThrow();
+                .orElseThrow(RuntimeException::new);
     }
 
     @DeleteMapping("cart/{userEmail}/all")
@@ -107,6 +107,6 @@ public class UserController {
     @GetMapping("checkout")
     public OrderDto checkout(Principal principal) {
         return service.checkout(principal.getName())
-                .orElseThrow();
+                .orElseThrow(RuntimeException::new);
     }
 }

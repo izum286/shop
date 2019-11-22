@@ -9,6 +9,8 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -52,9 +54,9 @@ public class UserServiceImpl implements UserService {
         if(!userRepository.existsById(email)){
             UserEntity entity = new UserEntity(email, name, phone, BigDecimal.valueOf(0), null, null, null);
             userRepository.save(entity);
-            UserDetailsEntity detailsEntity = userDetailsRepository.findById(email).orElseThrow();
+            UserDetailsEntity detailsEntity = userDetailsRepository.findById(email).orElseThrow(RuntimeException::new);
             detailsEntity.setRoles(
-                    List.of(
+                    Arrays.asList(
                             UserRoleEntity.builder()
                                     .role("ROLE_FULL_USER")
                                     .build()
@@ -68,7 +70,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Optional<UserDto> getUserInfo(String email) {
-        UserEntity entity = userRepository.findById(email).orElseThrow();
+        UserEntity entity = userRepository.findById(email).orElseThrow(RuntimeException::new);
         return Optional.of(map(entity));
     }
 
@@ -97,7 +99,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public Optional<ShoppingCartDto> addProductToCart(String userEmail, String productId, int count) {
         ShoppingCartEntity entity = shoppingCartRepository.findByOwner_Email(userEmail);
-        ProductEntity productEntity = productRepository.findById(productId).orElseThrow();
+        ProductEntity productEntity = productRepository.findById(productId).orElseThrow(RuntimeException::new);
         if (entity != null ) {
             ProductOrderEntity poe = entity.getProducts().stream()
                     .filter(p -> p.getProductId().equals(productId))
@@ -125,7 +127,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public Optional<ShoppingCartDto> removeProductFromCart(String userEmail, String productId, int count) {
         ShoppingCartEntity shoppingCartEntity = shoppingCartRepository.findByOwner_Email(userEmail);
-        ProductEntity productEntity = productRepository.findById(productId).orElseThrow();
+        ProductEntity productEntity = productRepository.findById(productId).orElseThrow(RuntimeException::new);
         if (shoppingCartEntity.getProducts() != null) {
             ProductOrderEntity productOrderEntity =shoppingCartEntity.getProducts().stream().filter(p -> p.getProductId().equals(productId)).findAny()
             .orElse(null);
@@ -158,7 +160,7 @@ public class UserServiceImpl implements UserService {
     public boolean clearShoppingCart(String userEmail) {
         ShoppingCartEntity toClean = shoppingCartRepository.findByOwner_Email(userEmail);
         if (toClean != null) {
-            toClean.setProducts(List.of());
+            toClean.setProducts(new ArrayList<>());
             toClean.setDate(null);
             shoppingCartRepository.save(toClean);
             return true;
@@ -177,7 +179,7 @@ public class UserServiceImpl implements UserService {
     public Optional<OrderDto> checkout(String userEmail) {
         if (enoughMoney(userEmail)) {
             ShoppingCartEntity shoppingCartEntity = shoppingCartRepository.findByOwner_Email(userEmail);
-            UserEntity userEntity = userRepository.findById(userEmail).orElseThrow();
+            UserEntity userEntity = userRepository.findById(userEmail).orElseThrow(RuntimeException::new);
             OrderEntity orderEntity = new OrderEntity();
             List<ProductOrderEntity> products = shoppingCartEntity.getProducts();
             for (ProductOrderEntity productOrderEntity : products) {
@@ -227,7 +229,7 @@ public class UserServiceImpl implements UserService {
 
     private boolean enoughMoney (String userEmail){
         ShoppingCartEntity toCheck = shoppingCartRepository.findByOwner_Email(userEmail);
-        UserEntity userEntity = userRepository.findById(userEmail).orElseThrow();
+        UserEntity userEntity = userRepository.findById(userEmail).orElseThrow(RuntimeException::new);
 
         if (toCheck != null) {
             long totalCost = toCheck.getProducts().stream().map(p -> (p.getPrice().longValue() * p.getCount())).count();
